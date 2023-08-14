@@ -18,3 +18,11 @@ def update_version(file_path):
     last_version = read_number_from_file(file_path)
     write_number_to_file(file_path, last_version + 1)
     return last_version + 1
+
+f = open("test.csv", "a")
+s = ""
+for i in range(400):
+    s = s + f"{i}, {i}, {i}, {i}\n"
+
+f.write(s)
+f.close()
