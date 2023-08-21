@@ -5,33 +5,34 @@ from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
 
 # Define the Transformer model
 class TransformerModel(nn.Module):
     def __init__(self, input_dim, output_dim, d_model, nhead, num_encoder_layers, num_decoder_layers):
         super(TransformerModel, self).__init__()
         self.encoder = nn.TransformerEncoder(nn.TransformerEncoderLayer(d_model=input_dim, nhead=nhead, batch_first=True), num_encoder_layers)
-        # self.decoder = nn.TransformerDecoder(nn.TransformerDecoderLayer(d_model=output_dim, nhead=1), num_decoder_layers)
+        self.decoder = nn.TransformerDecoder(nn.TransformerDecoderLayer(d_model=input_dim, nhead=1, batch_first=True), num_decoder_layers)
         # self.transformer = nn.Transformer(d_model=d_model, nhead=nhead, num_encoder_layers=num_encoder_layers, num_decoder_layers=num_decoder_layers)
-        self.fc = nn.Linear(d_model, output_dim)
+        self.fc = nn.Linear(d_model, d_model)
         self.output_layer = nn.Linear(input_sequence_length, 1)
 
         
     def forward(self, src, tgt):
         encoder_output = self.encoder(src)
-        linear_output = self.fc(encoder_output)
         
-        # decoder_output = self.decoder(tgt, output)
+        print(encoder_output.shape, tgt.shape)
+        # output = self.output_layer(linear_output.squeeze(len(linear_output.size()) - 1))
+        decoder_output = self.decoder(tgt, encoder_output)
 
-        # linear_output = self.fc(src)
-        output = self.output_layer(linear_output.squeeze(len(linear_output.size()) - 1))
-        return output
+        linear_output = self.fc(src)
+        return linear_output
 
 # Hyperparameters
-input_dim = 4          # Number of input features
+input_dim = 4         # Number of input features
 output_dim = 1        # Number of output features
 d_model = 4           # Embedding dimension
-nhead = 4              # Number of attention heads
+nhead = 4             # Number of attention heads
 num_encoder_layers = 1 # Number of encoder layers
 num_decoder_layers = 1 # Number of decoder layers
 lr = 0.01              # Learning rate
@@ -43,6 +44,8 @@ output_sequence_length = 1
 data = pd.read_csv("./data/nifty_data.csv")
 data = data.dropna()
 time_series_data = data[["Open", "High", "Low", "Close"]].values
+scaler = MinMaxScaler()
+time_series_data = scaler.fit_transform(time_series_data)
 time_series_data = torch.tensor(time_series_data, dtype=torch.float32)
 
 total_samples = len(time_series_data)
@@ -53,7 +56,7 @@ outputs = []
 
 for i in range(total_samples - input_sequence_length - output_sequence_length + 1):
     window = time_series_data[i : i + input_sequence_length]
-    output = time_series_data[i + input_sequence_length : i + input_sequence_length + output_sequence_length, 3]  # Output is the last entry in the window
+    output = time_series_data[i + input_sequence_length : i + input_sequence_length + output_sequence_length]  # Output is the last entry in the window
     windows.append(window)
     outputs.append(output)
 
