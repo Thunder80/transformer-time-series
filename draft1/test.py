@@ -1,0 +1,38 @@
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+import torch
+import os
+from train_data import prepare_training_data
+from model import TransformerModel
+from training import train_model
+from predict import predict_and_plot
+from utils import clean_directories
+from torch import nn, optim
+import torch
+
+def test():
+    feature_size = 5
+    nhead = 5
+    num_encoder_layers = 3
+    num_decoder_layers = 3
+    # lr = 0.001
+    batch_size = 5
+    num_epochs = 100
+    input_sequence_length = 30
+    output_sequence_length = 7
+
+    train_loader, time_series_data = prepare_training_data(input_sequence_length, output_sequence_length, "../data/nifty_test.csv", batch_size=batch_size)
+
+    model = TransformerModel(feature_size, nhead, num_encoder_layers, num_decoder_layers)
+    if not os.path.isfile("models/model_best.pt"):
+        print("No trained model found")
+        return
+
+    model.load_state_dict(torch.load("models/model_best.pt"))
+
+    criterion = nn.MSELoss()
+    optimizer = optim.Adam(model.parameters())
+
+    train_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length)
+
+test()
