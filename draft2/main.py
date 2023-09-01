@@ -27,7 +27,7 @@ def main():
 
     train_loader, time_series_data = prepare_training_data(input_sequence_length, output_sequence_length, "../data/test.csv", batch_size=batch_size)
 
-    model = TransformerModel(feature_size, nhead, num_encoder_layers, num_decoder_layers)
+    model = TransformerModel(feature_size, nhead, num_encoder_layers, num_decoder_layers).to(torch.device("mps"))
     if os.path.isfile("models/model_best.pt"):
         print("Found model")
         model.load_state_dict(torch.load("models/model_best.pt"))

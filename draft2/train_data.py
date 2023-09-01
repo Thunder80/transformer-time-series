@@ -38,7 +38,7 @@ def prepare_training_data(input_sequence_length, output_sequence_length, file_pa
         windows.append(window)
         outputs.append(output)
 
-    for i in range()
+    # for i in range()
 
     train_data = torch.stack(windows)
     train_targets = torch.stack(outputs)
