@@ -1,0 +1,15 @@
+Features = OHLCV
+feature_size = 5
+nhead = 5
+num_encoder_layers = 3
+num_decoder_layers = 3
+# lr = 0.001
+batch_size = 5
+num_epochs = 100
+input_sequence_length = 30
+output_sequence_length = 7
+
+Train loss = 10.9418
+Test loss = 11.5031
+
+Epochs = 200

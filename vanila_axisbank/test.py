@@ -25,7 +25,7 @@ def main():
     device = torch.device("cpu")
     train_loader, time_series_data = prepare_training_data(input_sequence_length, output_sequence_length, "../data/AXISBANK.NS_test.csv", batch_size=batch_size, device=device)
 
-    model = TransformerModel(feature_size, nhead, num_encoder_layers, num_decoder_layers)
+    model = TransformerModel(feature_size, nhead, num_encoder_layers, num_decoder_layers, device=device)
     if os.path.isfile("models/model_best.pt"):
         print("Found model")
         model.load_state_dict(torch.load("models/model_best.pt"))

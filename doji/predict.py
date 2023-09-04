@@ -19,7 +19,7 @@ def predict_and_plot(epoch, model, time_series_data, input_sequence_length, outp
             new_tgt_data = time_series_data[i + output_sequence_length : i + input_sequence_length + output_sequence_length]
             preds = model(new_src_data, new_tgt_data)
 
-            preds = preds.cpu()
+            preds = preds.cpu().detach().numpy()
             for pred in preds[-output_sequence_length:]:
                 predictions.append(pred)
                 prediction_ind.append(i + input_sequence_length + output_sequence_length)
