@@ -15,8 +15,8 @@ def main():
     clean_directories()
 
     # Hyperparameters
-    feature_size = 7
-    nhead = 7
+    feature_size = 5
+    nhead = 5
     num_encoder_layers = 3
     num_decoder_layers = 3
     # lr = 0.001
@@ -24,9 +24,9 @@ def main():
     num_epochs = 100
     input_sequence_length = 30
     output_sequence_length = 7
-    device = torch.device("mps")
+    device = torch.device("cpu")
 
-    train_loader, time_series_data = prepare_training_data(input_sequence_length, output_sequence_length, "../data/doji/AXISBANK.NS_train_doji.csv", batch_size=batch_size, device=device)
+    train_loader, time_series_data = prepare_training_data(input_sequence_length, output_sequence_length, "../data/AXISBANK.NS_train.csv", batch_size=batch_size, device=device)
 
     model = TransformerModel(feature_size, nhead, num_encoder_layers, num_decoder_layers, input_sequence_length).to(device)
     if os.path.isfile("models/model_best.pt"):

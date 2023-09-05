@@ -24,7 +24,7 @@ def main():
     num_epochs = 100
     input_sequence_length = 30
     output_sequence_length = 7
-    device = torch.device("mps")
+    device = torch.device("cpu")
 
     train_loader, time_series_data = prepare_training_data(input_sequence_length, output_sequence_length, "../data/AXISBANK.NS_train_spinning_top.csv", batch_size=batch_size, device=device)
 

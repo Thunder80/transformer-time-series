@@ -14,7 +14,7 @@ def predict_and_plot(epoch, model, time_series_data, input_sequence_length, outp
     # Perform predictions
     skip = output_sequence_length
     with torch.no_grad():
-        for i in range(0, len(time_series_data) - input_sequence_length, skip):
+        for i in range(0, len(time_series_data) - input_sequence_length - output_sequence_length - skip, skip):
             new_src_data = time_series_data[i:i + input_sequence_length]
             new_tgt_data = time_series_data[i + output_sequence_length : i + input_sequence_length + output_sequence_length]
             preds = model(new_src_data, new_tgt_data)

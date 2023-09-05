@@ -9,7 +9,7 @@ from joblib import dump
 def prepare_training_data(input_sequence_length, output_sequence_length, file_path, batch_size, device):
     data = pd.read_csv(file_path)
     data = data.dropna()
-    time_series_data = data[["Open", "High", "Low", "Close", "Volume", "IsDoji", "QuarterlyRSI"]].values
+    time_series_data = data[["Open", "High", "Low", "Close", "Volume"]].values
 
     scaler = MinMaxScaler()
     scaler.fit(time_series_data)
