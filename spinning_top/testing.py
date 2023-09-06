@@ -8,7 +8,8 @@ def test_model(model, train_loader, time_series_data, criterion, optimizer, num_
     with torch.no_grad():
         for batch_data, batch_targets in train_loader:
             # Forward pass~
-            predictions = model(batch_data, batch_targets)
+            tgts = torch.zeros(batch_targets.shape)
+            predictions = model(batch_data, tgts)
             
             # print(predictions[:, -output_sequence_length:, :].shape, batch_targets[:, -output_sequence_length:, :].shape)
             # Compute loss

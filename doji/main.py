@@ -15,8 +15,8 @@ def main():
     clean_directories()
 
     # Hyperparameters
-    feature_size = 7
-    nhead = 7
+    feature_size = 5
+    nhead = 5
     num_encoder_layers = 3
     num_decoder_layers = 3
     # lr = 0.001
