@@ -1,6 +1,5 @@
 import torch.nn as nn
 import torch
-import math
 
 class TransformerModel(nn.Module):
     def __init__(self, feature_size, nhead, num_encoder_layers, num_decoder_layers, max_len=5000):
@@ -19,8 +18,8 @@ class TransformerModel(nn.Module):
         tgt_mask = self._generate_square_subsequent_mask(tgt_size)
         
         # Adding positional encoding directly
-        src = self.add_positional_encoding(src, self.feature_size)
-        tgt = self.add_positional_encoding(tgt, self.feature_size)
+        # src = self.add_positional_encoding(src, self.feature_size)
+        # tgt = self.add_positional_encoding(tgt, self.feature_size)
 
         encoder_output = self.encoder(src, src_mask)
         decoder_output = self.decoder(tgt, encoder_output, tgt_mask)
