@@ -3,7 +3,6 @@ import torch
 
 from functions.model import TransformerModel
 from functions.training import train_model
-from functions.predict import predict
 from functions.data import prepare_data
 from functions.utils import clean_directories
 
