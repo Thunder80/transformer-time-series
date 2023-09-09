@@ -18,9 +18,9 @@ def main():
     num_encoder_layers = 3
     num_decoder_layers = 3
     # lr = 0.001
-    batch_size = 5
+    batch_size = 32
     num_epochs = 100
-    input_sequence_length = 30
+    input_sequence_length = 40
     output_sequence_length = 7
     device = torch.device("cpu")
 
@@ -34,7 +34,7 @@ def main():
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters())
 
-    train_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length, feature_size)
+    train_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length, feature_size, device)
 
 if __name__ == "__main__":
     main()

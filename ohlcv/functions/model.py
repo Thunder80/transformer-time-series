@@ -7,7 +7,7 @@ class TransformerModel(nn.Module):
         self.encoder = nn.TransformerEncoder(nn.TransformerEncoderLayer(d_model=feature_size, nhead=nhead, batch_first=True), num_encoder_layers)
         self.decoder = nn.TransformerDecoder(nn.TransformerDecoderLayer(d_model=feature_size, nhead=nhead, batch_first=True), num_decoder_layers)
         self.feature_size = feature_size
-
+        
     def forward(self, src, tgt):
         src_mask = src.shape[1] if len(src.shape) == 3 else src.shape[0]
         tgt_mask = tgt.shape[1] if len(tgt.shape) == 3 else tgt.shape[0]

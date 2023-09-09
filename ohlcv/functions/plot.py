@@ -4,18 +4,19 @@ import os
 import numpy as np
 import matplotlib
 
-def plot(time_series_data, prediction_ind, predictions, title, file_name_with_path):
+def plot(time_series_data, prediction_ind, predictions, title, file_name_with_path, show = False):
     scaler = load("./joblib/scaler.joblib")
-    time_series_data = scaler.inverse_transform(time_series_data)
+    time_series_data = scaler.inverse_transform(time_series_data.cpu())
     
-
     plt.clf()
     plt.plot(time_series_data[:, 3], color="red", label="Input")
-    plt.plot(prediction_ind, predictions[:, 3], color="blue", label="Predictions")
+    plt.plot(prediction_ind, predictions[:, 3], color="blue", label="Predictions", alpha=0.4)
     plt.title(title)
     plt.legend()
 
     plt.savefig(file_name_with_path)
+    if show:
+        plt.show()
 
 
 def plot_for_window(epoch, batch_data, batch_targets, batch_no, predictions, output_sequence_length, training = True):

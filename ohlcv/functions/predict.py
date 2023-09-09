@@ -2,7 +2,7 @@ import torch
 import numpy as np
 from joblib import load
 
-def predict(model, time_series_data, criterion, input_sequence_length, output_sequence_length, feature_size):
+def predict(model, time_series_data, criterion, input_sequence_length, output_sequence_length, feature_size, device):
     model.eval()
     predictions = []
     prediction_ind = []
@@ -14,7 +14,7 @@ def predict(model, time_series_data, criterion, input_sequence_length, output_se
             new_src_data = time_series_data[i:i + input_sequence_length].unsqueeze(0)
             new_tgt_data = time_series_data[i + input_sequence_length : i + input_sequence_length + output_sequence_length].unsqueeze(0)
 
-            tgt = torch.zeros(1, output_sequence_length, feature_size)
+            tgt = torch.zeros(1, output_sequence_length, feature_size, device=device)
 
             for j in range(output_sequence_length):
                 prediction = model(new_src_data, tgt[:, :j+1, :])
@@ -25,9 +25,11 @@ def predict(model, time_series_data, criterion, input_sequence_length, output_se
             loss = criterion(tgt[:, :new_tgt_data.shape[1], :], new_tgt_data)
             preds = tgt.cpu().numpy()
 
+            j = 0
             for pred in preds[0, -output_sequence_length:]:
                 predictions.append(pred)
-                prediction_ind.append(i + input_sequence_length + 1)
+                prediction_ind.append(i + j + input_sequence_length + 1)
+                j += 1
 
 
             total_loss += loss

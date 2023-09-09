@@ -27,7 +27,7 @@ def test():
         model.load_state_dict(torch.load("models/model_best.pt"))
 
     criterion = nn.MSELoss()
-    test_model(model, time_series_data, criterion, input_sequence_length, output_sequence_length, feature_size)
+    test_model(model, time_series_data, criterion, input_sequence_length, output_sequence_length, feature_size, device)
 
 
 test()
