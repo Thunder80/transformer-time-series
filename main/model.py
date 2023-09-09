@@ -1,3 +1,4 @@
+"""Model"""
 import torch.nn as nn
 import torch
 
@@ -13,8 +14,7 @@ class TransformerModel(nn.Module):
         
         encoder_mask = self._generate_square_subsequent_mask(src_mask)
         decoder_mask = self._generate_square_subsequent_mask(tgt_mask)
-        # decoder_mask = self._generate_square_subsequent_mask(tgt_mask) & self._generate_future_mask(tgt_mask, src_mask)
-
+        
         encoder_output = self.encoder(src, encoder_mask)
         decoder_output = self.decoder(tgt, encoder_output, decoder_mask)
 

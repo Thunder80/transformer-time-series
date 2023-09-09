@@ -77,7 +77,7 @@ def main():
     output_sequence_length = 7
 
     device = torch.device("cpu")
-    train_loader, time_series_data = prepare_training_data(input_sequence_length, output_sequence_length, "../data/AXISBANK.NS_test_spinning_top.csv", batch_size=batch_size, device=device)
+    train_loader, time_series_data = prepare_training_data(input_sequence_length, output_sequence_length, "../data/spinning_top/AXISBANK.NS_test_spinning_top.csv", batch_size=batch_size, device=device)
 
     model = TransformerModel(feature_size, nhead, num_encoder_layers, num_decoder_layers)
     if os.path.isfile("models/model_best.pt"):
@@ -89,5 +89,5 @@ def main():
 
     test_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length)
 
-# main()
-test30Days()
+main()
+# test30Days()

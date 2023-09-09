@@ -1,4 +1,5 @@
-from predict import predict_and_plot, plot_for_window
+from predict import predict
+from plot import plot, plot_for_window
 import torch
 
 def train_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length):
@@ -11,12 +12,11 @@ def train_model(model, train_loader, time_series_data, criterion, optimizer, num
         for batch_data, batch_targets in train_loader:
             optimizer.zero_grad()
             
-            tgts = batch_targets.detach().clone()
-            tgts[:, -output_sequence_length:, :] = 0
             # Forward pass~
-            predictions = model(batch_data, tgts)
+            predictions = model(batch_data, batch_targets[:, :-output_sequence_length+1, :])
+
+            print(predictions.shape, batch_targets.shape)
             
-            # print(predictions[:, -output_sequence_length:, :].shape, batch_targets[:, -output_sequence_length:, :].shape)
             # Compute loss
             loss = criterion(predictions[:, -output_sequence_length:, :], batch_targets[:, -output_sequence_length:, :])  # Predict next timestep
             
@@ -43,4 +43,6 @@ def train_model(model, train_loader, time_series_data, criterion, optimizer, num
     print("Training finished!")
     predict_and_plot(epoch=num_epochs, model=model, time_series_data=time_series_data, input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length)
     
+    prediction_ind, all_predictions = predict(model=model, time_series_data=time_series_data, input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length, training=True)
     
+    plot(time_series_data=time_series_data, prediction_ind=prediction_ind, predictions=all_predictions)

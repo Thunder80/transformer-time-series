@@ -1,4 +1,5 @@
-from predict import plot_for_window, predict_and_plot
+from predict import predict
+from plot import plot_for_window, plot
 import torch
 
 def test_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length):
@@ -22,7 +23,9 @@ def test_model(model, train_loader, time_series_data, criterion, optimizer, num_
             batch_no += 1
       
     print(f"Epoch 1/{num_epochs}, Loss: {total_loss:.4f}")
-
     print("Testing finished!")
-    predict_and_plot(epoch=num_epochs, model=model, time_series_data=time_series_data, input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length, training=False)
+
+    prediction_ind, all_predictions = predict(model=model, time_series_data=time_series_data, input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length, training=False)
+    
+    plot(time_series_data=time_series_data, prediction_ind=prediction_ind, predictions=all_predictions)
     

@@ -1,69 +1,24 @@
-# prediction_plotting.py
-import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
-import torch
 from joblib import load
 import os
+import numpy as np
+import matplotlib
 
-def predict_and_plot(epoch, model, time_series_data, input_sequence_length, output_sequence_length, training = True):
-    model.eval()
-    predictions = []
-    prediction_ind = []
-
-    # Perform predictions
-    skip = output_sequence_length
-    with torch.no_grad():
-        for i in range(0, len(time_series_data) - input_sequence_length, skip):
-            new_src_data = time_series_data[i:i + input_sequence_length]
-            new_tgt_data = time_series_data[i + output_sequence_length : i + input_sequence_length + output_sequence_length]
-
-            # tgts = new_tgt_data.detach().clone()
-            # tgts[-output_sequence_length:] = 0
-
-            # preds = model(new_src_data, new_tgt_data)
-
-            # preds = preds.cpu().detach().numpy()
-            # for pred in preds[-output_sequence_length:]:
-            #     predictions.append(pred)
-            #     prediction_ind.append(i + input_sequence_length + output_sequence_length)
-            tgt = new_tgt_data.detach().clone()
-            tgt[-output_sequence_length:] = 0
-
-            for j in range(output_sequence_length):
-                prediction = model(new_src_data, tgt[:-output_sequence_length+1, :])
-                tgt[j] = prediction[0, -1]
-
-            preds = tgt.cpu().detach().numpy()
-            for pred in preds[-output_sequence_length:]:
-                predictions.append(pred)
-                prediction_ind.append(i + input_sequence_length + output_sequence_length)
-
-
-    # print(predictions[:5])
-    predictions = np.array(predictions)
-    # print("Predicted values:", predictions)
-
-    # print("Training data shape:", time_series_data.shape)
-    # print("Predictions shape:", predictions.shape)
-
+def plot(time_series_data, prediction_ind, predictions, title, file_name_with_path):
     scaler = load("./joblib/scaler.joblib")
-    time_series_data = scaler.inverse_transform(time_series_data.cpu())
-    predictions = scaler.inverse_transform(predictions)
+    time_series_data = scaler.inverse_transform(time_series_data)
     
+
     plt.clf()
     plt.plot(time_series_data[:, 3], color="red", label="Input")
     plt.plot(prediction_ind, predictions[:, 3], color="blue", label="Predictions")
-    plt.title(f"Close price predictions epoch {epoch}")
+    plt.title(title)
     plt.legend()
-    if training:
-        plt.savefig(f'predictions/training/pred_{epoch}.png')
-    else:
-        plt.savefig(f'predictions/test/pred_{epoch}.png')
 
-def plot_for_window(epoch, model, batch_data, batch_targets, batch_no, predictions, input_sequence_length, output_sequence_length, training = True):
-    model.eval()
+    plt.savefig(file_name_with_path)
 
+
+def plot_for_window(epoch, batch_data, batch_targets, batch_no, predictions, output_sequence_length, training = True):
     scaler = load("./joblib/scaler.joblib")
     print(f"Ploting epoch {epoch}, batch {batch_no}")
     for i in range(0, len(batch_data)):

@@ -6,10 +6,10 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from joblib import dump
 
-def prepare_training_data(input_sequence_length, output_sequence_length, file_path, batch_size, device):
+def prepare_data(input_sequence_length, output_sequence_length, file_path, batch_size, feature_names, device):
     data = pd.read_csv(file_path)
     data = data.dropna()
-    time_series_data = data[["Open", "High", "Low", "Close", "Volume", "PriceDifference", "ShadowSize", "IsSpinningTop"]].values
+    time_series_data = data[feature_names].values
 
     scaler = MinMaxScaler()
     scaler.fit(time_series_data)
@@ -30,15 +30,15 @@ def prepare_training_data(input_sequence_length, output_sequence_length, file_pa
         windows.append(window)
         outputs.append(output)
 
-    train_data = torch.stack(windows)
-    train_targets = torch.stack(outputs)
+    data = torch.stack(windows)
+    data_targets = torch.stack(outputs)
 
-    print("Training input data shape:", train_data.shape)
-    print("Training ouput data shape:", train_targets.shape)
+    print("Training input data shape:", data.shape)
+    print("Training ouput data shape:", data_targets.shape)
     print("\n")
 
     # Create DataLoader
-    train_dataset = TensorDataset(train_data, train_targets)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=False)
+    dataset = TensorDataset(data, data_targets)
+    data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
 
-    return train_loader, time_series_data
+    return data_loader, time_series_data
