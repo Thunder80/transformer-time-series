@@ -1,5 +1,5 @@
-from functions.predict import predict
-from functions.plot import plot, plot_for_window
+from predict import predict
+from plot import plot, plot_for_window
 import torch
 import numpy as np
 from joblib import load

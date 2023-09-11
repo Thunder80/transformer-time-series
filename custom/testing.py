@@ -1,5 +1,5 @@
-from functions.predict import predict
-from functions.plot import plot
+from predict import predict
+from plot import plot
 import torch
 
 def test_model(model, time_series_data, criterion, input_sequence_length, output_sequence_length, feature_size, device):
