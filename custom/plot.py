@@ -52,33 +52,11 @@ def plot_for_window(epoch, batch_data, batch_targets, batch_no, predictions, out
         else:
             plt.savefig(f'predictions/test/batch/epoch_{epoch}/batch_{batch_no}/pred_epoch_{epoch}_batch_{batch_no}_{i}.png') 
 
-def plot_for_test(epoch, model, batch_data, batch_targets, batch_no, predictions, input_sequence_length, output_sequence_length):
-    model.eval()
 
-    scaler = load("./joblib/scaler.joblib")
-    print(f"Ploting epoch {epoch}, batch {batch_no}")
-    for i in range(0, len(batch_data)):
-        src = batch_data[i].numpy()
-        tgt = batch_targets[i].numpy()
-        preds = predictions[i].detach().numpy()
-        
-        src = scaler.inverse_transform(src)
-        tgt = scaler.inverse_transform(tgt)
-        preds = scaler.inverse_transform(preds)
-        
-        true_tgt = np.concatenate((src[:, 3], tgt[-output_sequence_length:, 3]))
-        true_preds = np.concatenate((src[:, 3], preds[-output_sequence_length:, 3]))
-        matplotlib.use("Agg")
-        plt.clf()
-        plt.plot(src[:, 3], color="blue", label="input", linewidth=3)
-        plt.plot(true_preds, color="green", label="predictions", marker="o")
-        plt.plot(true_tgt, color="red", label="target", linestyle="dotted", marker="o")
-        plt.legend()
-        plt.xlabel("Time")
-        plt.ylabel("Close price")
-        plt.title(f"Close price prediction epoch_{epoch} batch_{batch_no} {i}")
-        if training:
-            plt.savefig(f'predictions/training/batch/epoch_{epoch}/batch_{batch_no}/pred_epoch_{epoch}_batch_{batch_no}_{i}.png') 
-        else:
-            plt.savefig(f'predictions/test/epoch_{epoch}/batch_{batch_no}/pred_epoch_{epoch}_batch_{batch_no}_{i}.png') 
+def plot_loss(losses, title, file_name_with_path):
+    plt.clf()
+    plt.plot(losses, color="green", label="Loss")
+    plt.title(title)
+    plt.legend()
 
+    plt.savefig(file_name_with_path)

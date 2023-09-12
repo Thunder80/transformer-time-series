@@ -1,0 +1,13 @@
+Features = OHLCVDoji
+feature_size = 6
+nhead = 3
+num_encoder_layers = 3
+num_decoder_layers = 3
+# lr = 0.001
+batch_size = 32
+num_epochs = 300 (3 passes)
+input_sequence_length = 40
+output_sequence_length = 7
+
+Train loss = 1.2103
+Test loss = 3.5999433994293213

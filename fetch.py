@@ -3,7 +3,7 @@ import pandas as pd
 
 train_perc = 0.8
 # Replace 'AAPL' with the stock symbol of your choice
-stock_symbol = '^NSEI'
+stock_symbol = 'TATAMOTORS.NS'
 
 # Fetch all historical stock data
 stock_data = yf.download(stock_symbol)

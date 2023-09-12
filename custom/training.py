@@ -1,5 +1,5 @@
 from predict import predict
-from plot import plot, plot_for_window
+from plot import plot, plot_for_window, plot_loss
 import torch
 import numpy as np
 from joblib import load
@@ -9,6 +9,7 @@ import math
 def train_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length, feature_size, device):
     min_loss = 500
     k = 22
+    losses = []
     scaler = load("./joblib/scaler.joblib")
     for epoch in range(num_epochs):
         total_loss = 0.0
@@ -69,6 +70,8 @@ def train_model(model, train_loader, time_series_data, criterion, optimizer, num
             torch.save(model.state_dict(), model_path)
             min_loss = total_loss
 
+        losses.append(total_loss)
+        plot_loss(losses=losses, title=f"Loss after epoch {epoch}", file_name_with_path="./predictions/training/loss.png")
         print(f"Epoch {epoch+1}/{num_epochs}, Loss: {total_loss:.4f}, Sampled count = {sampled_count}, Non sampled count = {non_sampled_count}")
 
     print("Training finished!")

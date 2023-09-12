@@ -1,39 +1,36 @@
-# test.py
-import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
-import torch
-import os
-from testing import test_model
-from train_data import prepare_training_data
-from model import TransformerModel
-from utils import clean_directories
-from torch import nn, optim
-import torch
+import sys
+sys.path.append('../custom')
 
-def main():
+import os
+import torch
+from torch import nn
+
+from model import TransformerModel
+from testing import test_model
+from data import prepare_data
+
+
+def test():
     # Hyperparameters
-    feature_size = 7
-    nhead = 7
+    feature_size = 6
+    nhead = 3
     num_encoder_layers = 3
     num_decoder_layers = 3
     # lr = 0.001
     batch_size = 5
-    num_epochs = 100
-    input_sequence_length = 30
+    input_sequence_length = 40
     output_sequence_length = 7
-
     device = torch.device("cpu")
-    train_loader, time_series_data = prepare_training_data(input_sequence_length, output_sequence_length, "../data/doji/AXISBANK.NS_test_doji.csv", batch_size=batch_size, device=device)
 
-    model = TransformerModel(feature_size, nhead, num_encoder_layers, num_decoder_layers)
+    _, time_series_data = prepare_data(input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length, file_path="../data/nifty/doji/^NSEI_test_doji.csv", batch_size=batch_size, feature_names=["Open", "High", "Low", "Close", "Volume", "Doji"], device=device)
+
+    model = TransformerModel(feature_size, nhead, num_encoder_layers, num_decoder_layers).to(device)
     if os.path.isfile("models/model_best.pt"):
         print("Found model")
         model.load_state_dict(torch.load("models/model_best.pt"))
 
     criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters())
+    test_model(model, time_series_data, criterion, input_sequence_length, output_sequence_length, feature_size, device)
 
-    test_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length)
 
-if __name__ == "__main__":
-    main()
+test()

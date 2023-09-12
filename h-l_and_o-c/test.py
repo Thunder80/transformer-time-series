@@ -18,7 +18,7 @@ def test():
     num_decoder_layers = 3
     # lr = 0.001
     batch_size = 5
-    input_sequence_length = 30
+    input_sequence_length = 40
     output_sequence_length = 7
     device = torch.device("cpu")
 
