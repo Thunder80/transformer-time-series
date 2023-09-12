@@ -44,5 +44,3 @@ def convert_daily_to_monthly():
     }).reset_index()
 
     monthly_data.to_csv('../data/nifty_monthly.csv', index=False)
-
-convert_daily_to_monthly()

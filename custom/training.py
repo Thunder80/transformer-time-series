@@ -8,7 +8,7 @@ import math
 
 def train_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length, feature_size, device):
     min_loss = 500
-    k = 130
+    k = 22
     scaler = load("./joblib/scaler.joblib")
     for epoch in range(num_epochs):
         total_loss = 0.0
