@@ -12,6 +12,7 @@ def train_model(model, train_loader, time_series_data, criterion, optimizer, num
     scaler = load("./joblib/scaler.joblib")
     probability_decrease = 0.1
     probability_thresold = 0.95
+    
     for epoch in range(num_epochs):
         total_loss = 0.0
 
@@ -29,7 +30,7 @@ def train_model(model, train_loader, time_series_data, criterion, optimizer, num
 
 
             tgt = torch.zeros(batch_targets[:, :-1, :].shape, device=device)
-            if random_number < probability_threshold:
+            if random_number < probability_thresold:
                 tgt = batch_targets[:, -output_sequence_length+1:, :]
                 sampled_count += 1
             else:
