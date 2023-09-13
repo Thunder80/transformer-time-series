@@ -27,7 +27,7 @@ def main():
     input_sequence_length = 40
     output_sequence_length = 7
     device = torch.device("cpu")
-    file_path = "../data/nifty/doji/^NSEI_train_doji.csv"
+    file_path = "../data/tata/doji/TATAMOTORS.NS_train_doji.csv"
 
     train_loader, time_series_data = prepare_data(input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length, file_path=file_path, batch_size=batch_size, feature_names=features, device=device)
 
@@ -43,3 +43,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# 300 epoch loss 1.6

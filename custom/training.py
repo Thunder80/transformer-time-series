@@ -8,9 +8,10 @@ import math
 
 def train_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length, feature_size, device):
     min_loss = 500
-    k = 22
     losses = []
     scaler = load("./joblib/scaler.joblib")
+    probability_decrease = 0.1
+    probability_thresold = 0.95
     for epoch in range(num_epochs):
         total_loss = 0.0
 
@@ -20,7 +21,6 @@ def train_model(model, train_loader, time_series_data, criterion, optimizer, num
         
 
         sampled_count, non_sampled_count = 0, 0
-        probability_threshold = k / (k + math.exp(epoch / k))
 
         for batch_data, batch_targets in train_loader:
             optimizer.zero_grad()
@@ -52,6 +52,9 @@ def train_model(model, train_loader, time_series_data, criterion, optimizer, num
             if epoch % 10 == 0 and batch_no % 500 == 0:
                 plot_for_window(epoch=epoch, batch_data=batch_data, batch_targets=batch_targets, batch_no=batch_no, predictions=predictions,output_sequence_length=output_sequence_length)
             batch_no += 1
+
+        if num_epochs % 100 == 0:
+            probability_thresold -= probability_decrease
         
         teacher_forcing_preds = np.array(teacher_forcing_preds)
         teacher_forcing_preds = scaler.inverse_transform(teacher_forcing_preds)
