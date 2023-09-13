@@ -16,7 +16,7 @@ def main():
     clean_directories()
 
     # Hyperparameters
-    features = ["Open", "High", "Low", "Close", "Volume", "Doji"]
+    features = ["Open", "High", "Low", "Close", "Volume", "Spinning_top"]
     feature_size = len(features)
     nhead = 3
     num_encoder_layers = 3
