@@ -48,7 +48,6 @@ def train_model(model, train_loader, time_series_data, criterion, optimizer, num
             loss.backward()
             optimizer.step()
             
-            batch_data.shape
             total_loss += loss.detach().item()
             if epoch % 10 == 0 and batch_no % 500 == 0:
                 plot_for_window(epoch=epoch, batch_data=batch_data, batch_targets=batch_targets, batch_no=batch_no, predictions=predictions,output_sequence_length=output_sequence_length)
@@ -71,8 +70,9 @@ def train_model(model, train_loader, time_series_data, criterion, optimizer, num
             min_loss = total_loss
 
         losses.append(total_loss)
+
         plot_loss(losses=losses, title=f"Loss after epoch {epoch}", file_name_with_path="./predictions/training/loss.png")
-        print(f"Epoch {epoch+1}/{num_epochs}, Loss: {total_loss:.4f}, Sampled count = {sampled_count}, Non sampled count = {non_sampled_count}")
+        print(f"Epoch {epoch+1}/{num_epochs}, Loss: {total_loss:.4f}, Loss per sample: {total_loss / len(time_series_data)} Sampled count: {sampled_count}, Non sampled count: {non_sampled_count}")
 
     print("Training finished!")
     prediction_ind, all_predictions, total_loss = predict(model=model, time_series_data=time_series_data, criterion=criterion, input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length, feature_size=feature_size, device=device)

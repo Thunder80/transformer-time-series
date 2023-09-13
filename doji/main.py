@@ -16,7 +16,8 @@ def main():
     clean_directories()
 
     # Hyperparameters
-    feature_size = 6
+    features = ["Open", "High", "Low", "Close", "Volume", "Doji"]
+    feature_size = len(features)
     nhead = 3
     num_encoder_layers = 3
     num_decoder_layers = 3
@@ -26,8 +27,9 @@ def main():
     input_sequence_length = 40
     output_sequence_length = 7
     device = torch.device("cpu")
+    file_path = "../data/nifty/doji/^NSEI_train_doji.csv"
 
-    train_loader, time_series_data = prepare_data(input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length, file_path="../data/nifty/doji/^NSEI_train_doji.csv", batch_size=batch_size, feature_names=["Open", "High", "Low", "Close", "Volume", "Doji"], device=device)
+    train_loader, time_series_data = prepare_data(input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length, file_path=file_path, batch_size=batch_size, feature_names=features, device=device)
 
     model = TransformerModel(feature_size, nhead, num_encoder_layers, num_decoder_layers).to(device)
     if os.path.isfile("models/model_best.pt"):

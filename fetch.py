@@ -3,10 +3,11 @@ import pandas as pd
 
 train_perc = 0.8
 # Replace 'AAPL' with the stock symbol of your choice
-stock_symbol = 'TATAMOTORS.NS'
+stock_symbol = 'AXISBANK.NS'
 
 # Fetch all historical stock data
 stock_data = yf.download(stock_symbol)
+stock_data = stock_data[stock_data["Volume"] != 0]
 
 # Save stock data as a CSV file
 csv_filename = f"data/{stock_symbol}_all_data.csv"
