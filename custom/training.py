@@ -11,8 +11,8 @@ def train_model(model, train_loader, time_series_data, criterion, optimizer, num
     losses = []
     scaler = load("./joblib/scaler.joblib")
     probability_decrease = 0.1
-    probability_thresold = 0.95
-    
+    probability_thresold = 1.05
+
     for epoch in range(num_epochs):
         total_loss = 0.0
 
@@ -54,9 +54,10 @@ def train_model(model, train_loader, time_series_data, criterion, optimizer, num
                 plot_for_window(epoch=epoch, batch_data=batch_data, batch_targets=batch_targets, batch_no=batch_no, predictions=predictions,output_sequence_length=output_sequence_length)
             batch_no += 1
 
-        if num_epochs % 100 == 0:
+        if epoch % 100 == 0:
             probability_thresold -= probability_decrease
         
+        print(probability_thresold)
         teacher_forcing_preds = np.array(teacher_forcing_preds)
         teacher_forcing_preds = scaler.inverse_transform(teacher_forcing_preds)
         plot(time_series_data=time_series_data, prediction_ind=list(range(30, len(teacher_forcing_preds) + 30)), predictions=teacher_forcing_preds, title=f"Teacher forcing pred {epoch}", file_name_with_path=f"./predictions/training/tf/tf_{epoch}.png")
