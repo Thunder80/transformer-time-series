@@ -6,11 +6,10 @@ from joblib import load
 import random
 import math
 
-def train_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length, feature_size, device):
+def train_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length, feature_size, device, probability_decrease = 0.1):
     min_loss = 500
     losses = []
     scaler = load("./joblib/scaler.joblib")
-    probability_decrease = 0.1
     probability_thresold = 1.05
 
     for epoch in range(num_epochs):
