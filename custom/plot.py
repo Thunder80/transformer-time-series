@@ -4,8 +4,8 @@ import os
 import numpy as np
 import matplotlib
 
-def plot(time_series_data, prediction_ind, predictions, title, file_name_with_path, show = False):
-    scaler = load("./joblib/scaler.joblib")
+def plot(time_series_data, prediction_ind, predictions, title, file_name_with_path,root_folder, show = False):
+    scaler = load(f"{root_folder}/joblib/scaler.joblib")
     time_series_data = scaler.inverse_transform(time_series_data.cpu())
     
     plt.clf()
@@ -19,8 +19,8 @@ def plot(time_series_data, prediction_ind, predictions, title, file_name_with_pa
         plt.show()
 
 
-def plot_for_window(epoch, batch_data, batch_targets, batch_no, predictions, output_sequence_length, training = True):
-    scaler = load("./joblib/scaler.joblib")
+def plot_for_window(epoch, batch_data, batch_targets, batch_no, predictions, output_sequence_length, root_folder, training = True):
+    scaler = load(f"{root_folder}/joblib/scaler.joblib")
     print(f"Ploting epoch {epoch}, batch {batch_no}")
     for i in range(0, len(batch_data)):
         if training:

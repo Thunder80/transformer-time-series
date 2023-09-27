@@ -2,7 +2,7 @@ import torch
 import numpy as np
 from joblib import load
 
-def predict(model, time_series_data, criterion, input_sequence_length, output_sequence_length, feature_size, device):
+def predict(model, time_series_data, criterion, input_sequence_length, output_sequence_length, feature_size, device, root_folder):
     model.eval()
     predictions = []
     prediction_ind = []
@@ -36,7 +36,7 @@ def predict(model, time_series_data, criterion, input_sequence_length, output_se
 
     predictions = np.array(predictions)
 
-    scaler = load("./joblib/scaler.joblib")
+    scaler = load(f"{root_folder}/joblib/scaler.joblib")
     predictions = scaler.inverse_transform(predictions)
 
     return prediction_ind, predictions, total_loss

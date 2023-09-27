@@ -5,8 +5,9 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from joblib import dump
+from utils import create_empty_directory
 
-def prepare_data(input_sequence_length, output_sequence_length, file_path, batch_size, feature_names, device):
+def prepare_data(input_sequence_length, output_sequence_length, file_path, batch_size, feature_names, device, root_folder):
     data = pd.read_csv(file_path)
     data = data.dropna()
     time_series_data = data[feature_names].values
@@ -16,7 +17,8 @@ def prepare_data(input_sequence_length, output_sequence_length, file_path, batch
     time_series_data = scaler.transform(time_series_data)
     time_series_data = torch.tensor(time_series_data, dtype=torch.float32, device=device)
 
-    dump(scaler, "./joblib/scaler.joblib")
+    create_empty_directory(f"{root_folder}/joblib")
+    dump(scaler, f"{root_folder}/joblib/scaler.joblib")
 
     total_samples = len(time_series_data)
     print("Total samples", total_samples)
