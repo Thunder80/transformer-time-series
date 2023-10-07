@@ -5,3 +5,6 @@ predictions/
 joblib/
 
 *.csv
+test_loss.txt
+params.txt
+loss.txt

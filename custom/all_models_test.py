@@ -10,35 +10,9 @@ from data import prepare_data
 from training import train_model
 from utils import create_empty_directory
 
-"""
-conf_file.txt
-dataset - string
-features - string[]
-num_encoder_layers - number[]
-num_decoder_layers - number[]
-batch_size - number[]
-input_sequence_length - number[]
-output_sequence_length - number[]
-"""
-
-def train(features, nhead, num_encoder_layers, num_decoder_layers, batch_size, num_epochs, input_sequence_length, output_sequence_length, dataset, root_folder, stock, device):
-    file_path = f"../data/{stock}/{dataset}/train.csv"
-    feature_size = len(features)
-
-    train_loader, time_series_data = prepare_data(input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length, file_path=file_path, batch_size=batch_size, feature_names=features, device=device, root_folder=root_folder)
-
-    model = TransformerModel(feature_size, nhead, num_encoder_layers, num_decoder_layers).to(device)
-    if os.path.isfile(f"{root_folder}/models/model_best.pt"):
-        print("Found model")
-        model.load_state_dict(torch.load(f"{root_folder}/models/model_best.pt"))
-
-    criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters())
-
-    train_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length, feature_size, device, root_folder=root_folder)
-
-def test(features, nhead, num_encoder_layers, num_decoder_layers, batch_size, num_epochs, input_sequence_length, output_sequence_length, dataset, root_folder, stock):
+def test(features, nhead, num_encoder_layers, num_decoder_layers, batch_size, num_epochs, input_sequence_length, output_sequence_length, dataset, root_folder, stock, device):
     file_path = f"../data/{stock}/{dataset}/test.csv"
+    feature_size = len(features)
 
     _, time_series_data = prepare_data(input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length, file_path=file_path, batch_size=batch_size, feature_names=features, device=device, root_folder=root_folder)
 
@@ -87,7 +61,7 @@ def all_models(conf_file):
             with open(f"{root_folder}/params.txt", 'w') as file:
                 file.write(params)
 
-            train(features=features, nhead=nhead, num_encoder_layers=num_encoder_layer, num_decoder_layers=num_decoder_layer, batch_size=batch_size, num_epochs=num_epochs, input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length, dataset=dataset, root_folder=root_folder, stock=stock, device=device)
+            test(features=features, nhead=nhead, num_encoder_layers=num_encoder_layer, num_decoder_layers=num_decoder_layer, batch_size=batch_size, num_epochs=num_epochs, input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length, dataset=dataset, root_folder=root_folder, stock=stock, device=device)
             i = i + 1
 
 

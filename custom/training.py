@@ -46,7 +46,7 @@ def train_model(model, train_loader, time_series_data, criterion, optimizer, num
             loss = criterion(predictions, batch_targets[:, 1:, :])  # Predict next timestep
 
             for pred in predictions:
-                teacher_forcing_preds.append(pred[-1].cpu().detach())
+                teacher_forcing_preds.append(pred[-1].cpu().detach().numpy())
             
             # Backpropagation
             loss.backward()
