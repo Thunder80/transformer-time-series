@@ -1,3 +1,4 @@
+from custom.utils import create_empty_directory
 # data_preparation.py
 from torch.utils.data import DataLoader, TensorDataset
 import torch
@@ -5,7 +6,6 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from joblib import dump
-from utils import create_empty_directory
 
 def prepare_data(input_sequence_length, output_sequence_length, file_path, batch_size, feature_names, device, root_folder):
     data = pd.read_csv(file_path)

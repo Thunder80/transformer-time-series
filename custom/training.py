@@ -1,22 +1,23 @@
-from predict import predict
-from plot import plot, plot_for_window, plot_loss
+from custom.predict import predict
+from custom.utils import create_empty_directory
+from custom.plot import plot, plot_for_window, plot_loss
 import torch
 import numpy as np
 from joblib import load
 import random
-import math
-from utils import create_empty_directory
+from tqdm import tqdm 
 
-def train_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length, feature_size, device, root_folder, probability_decrease = 0.1):
+def train_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length, feature_size, device, root_folder, probability_decrease = 0.1, decrease_rate = 0.1):
     min_loss = 500
+    decrease_after = num_epochs * decrease_rate
     losses = []
     scaler = load(f"{root_folder}/joblib/scaler.joblib")
     probability_thresold = 1.05
     create_empty_directory(f"{root_folder}/predictions/training/tf")
     create_empty_directory(f"{root_folder}/models")
 
-
-    for epoch in range(num_epochs):
+ 
+    for epoch in tqdm(range(num_epochs),  desc="Training: "):
         total_loss = 0.0
 
         model.train()
@@ -57,7 +58,7 @@ def train_model(model, train_loader, time_series_data, criterion, optimizer, num
             #     plot_for_window(epoch=epoch, batch_data=batch_data, batch_targets=batch_targets, batch_no=batch_no, predictions=predictions,output_sequence_length=output_sequence_length)
             batch_no += 1
 
-        if epoch % 100 == 0:
+        if epoch % decrease_after == 0:
             probability_thresold -= probability_decrease
         
         print(probability_thresold)
