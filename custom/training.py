@@ -60,6 +60,7 @@ def train_model(model, train_loader, time_series_data, criterion, optimizer, num
 
         if epoch % decrease_after == 0:
             probability_thresold -= probability_decrease
+            min_loss = min_loss + 1
         
         print(probability_thresold)
         teacher_forcing_preds = np.array(teacher_forcing_preds)
@@ -74,6 +75,7 @@ def train_model(model, train_loader, time_series_data, criterion, optimizer, num
             file_name_with_path=f"./{root_folder}/predictions/training/epoch_{epoch}.png", root_folder=root_folder)
         
         if total_loss < min_loss:
+            print("Model updated")
             model_path = f"{root_folder}/models/" + f"/model_best.pt"
             torch.save(model.state_dict(), model_path)
             min_loss = total_loss

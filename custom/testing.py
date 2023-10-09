@@ -1,7 +1,7 @@
-from predict import predict
-from plot import plot
+from custom.predict import predict
+from custom.plot import plot
 import torch
-from utils import create_empty_directory
+from custom.utils import create_empty_directory
 
 def test_model(model, time_series_data, criterion, input_sequence_length, output_sequence_length, feature_size, device, root_folder):
     create_empty_directory(f"{root_folder}/predictions/test")

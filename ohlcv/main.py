@@ -17,10 +17,10 @@ def main():
     num_decoder_layers = 3
     # lr = 0.001
     batch_size = 32
-    num_epochs = 300
+    num_epochs = 1000
     input_sequence_length = 40
     output_sequence_length = 7
-    device = torch.device("cpu")
+    device = torch.device("mps")
 
     train_loader, time_series_data = prepare_data(input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length, file_path="../data/nifty/all_data/train.csv", batch_size=batch_size, feature_names=["Open", "High", "Low", "Close", "Volume"], device=device, root_folder="./results")
 
