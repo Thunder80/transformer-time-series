@@ -17,6 +17,10 @@ def create_empty_directory(path):
     except Exception as e:
         print(f"Error creating directory: {e}")
 
+def clear_prev_preds(root_folder):
+    delete_directory(f"{root_folder}/predictions/")
+    delete_directory(f"{root_folder}joblib")
+
 def clean_directories():
     delete_directory("predictions/")
     create_empty_directory("predictions/")

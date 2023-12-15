@@ -23,8 +23,9 @@ def main():
     output_sequence_length = 7
     device = torch.device("mps")
     file_path = "../data/eth/spinning_top/train.csv"
+    workspace = "./results_eth_corrected_model"
 
-    train_loader, time_series_data = prepare_data(input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length, file_path=file_path, batch_size=batch_size, feature_names=features, device=device, root_folder="./results_eth")
+    train_loader, time_series_data = prepare_data(input_sequence_length=input_sequence_length, output_sequence_length=output_sequence_length, file_path=file_path, batch_size=batch_size, feature_names=features, device=device, root_folder=workspace)
 
     model = TransformerModel(feature_size, nhead, num_encoder_layers, num_decoder_layers).to(device)
     if os.path.isfile("models/model_best.pt"):
@@ -34,7 +35,7 @@ def main():
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters())
 
-    train_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length, feature_size, device, "./results_eth")
+    train_model(model, train_loader, time_series_data, criterion, optimizer, num_epochs, input_sequence_length, output_sequence_length, feature_size, device, workspace)
 
 if __name__ == "__main__":
     main()

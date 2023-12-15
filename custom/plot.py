@@ -9,8 +9,8 @@ def plot(time_series_data, prediction_ind, predictions, title, file_name_with_pa
     time_series_data = scaler.inverse_transform(time_series_data.cpu())
     
     plt.clf()
-    plt.plot(time_series_data[:, 3], color="red", label="Input")
-    plt.plot(prediction_ind, predictions[:, 3], color="blue", label="Predictions", alpha=0.4)
+    plt.plot(time_series_data[:, 0], color="red", label="Input")
+    plt.plot(prediction_ind, predictions[:, 0], color="blue", label="Predictions", alpha=0.4)
     plt.title(title)
     plt.legend()
 
