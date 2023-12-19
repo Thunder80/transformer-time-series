@@ -51,7 +51,6 @@ def predict_multi(model, time_series_data, criterion, input_sequence_length, out
     total_loss = 0.0  # Initialize the total loss for the epoch
     with torch.no_grad():
         for i in range(0, len(time_series_data) - input_sequence_length, skip):
-            print(time_series_data.shape)
             new_src_data_daily = time_series_data[i:i + input_sequence_length].unsqueeze(0)
             new_tgt_data_daily = time_series_data[i + input_sequence_length : i + input_sequence_length + output_sequence_length].unsqueeze(0)
 

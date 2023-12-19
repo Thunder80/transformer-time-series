@@ -23,7 +23,7 @@ def main():
     input_sequence_length = 40
     output_sequence_length = 7
     device = torch.device("mps")
-    file_path = "../data/axis/all_data/train.csv"
+    file_path = "../data/mydata/train_1.csv"
     workspace = "./results"
 
     clear_prev_preds(workspace)

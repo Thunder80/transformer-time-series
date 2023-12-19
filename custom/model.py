@@ -66,19 +66,14 @@ class MultiTimeHorizonTransformerModel(nn.Module):
         decoder_output_weekly = self.decoder_weekly(tgt_weekly, encoder_output_weekly, decoder_mask)
 
 
-        flat_daily = decoder_output_daily.view(-1, 3)  # Reshaping to (32*6, 3)
-        flat_weekly = decoder_output_weekly.view(-1, 3)  # Reshaping to (32*6, 3)
+        flat_daily = decoder_output_daily.view(-1, 3)
+        flat_weekly = decoder_output_weekly.view(-1, 3)
 
-        # Concatenate the flattened tensors along a specific dimension (here, dimension 1)
-        combined = torch.cat((flat_daily, flat_weekly), dim=1)  # Size: (32*6, 3*2)
+        combined = torch.cat((flat_daily, flat_weekly), dim=1)
 
-        # Apply linear transformation
         output = self.linear_layer(combined)
 
-        print(output.shape)
-        # Reshape the output back to the original shape
-        output = output.view(decoder_output_daily.shape[0], decoder_output_daily.shape[1], 3)  # Reshaping to (32, 6, 3)
-
+        output = output.view(decoder_output_daily.shape[0], decoder_output_daily.shape[1], 3)
 
         return output
 
